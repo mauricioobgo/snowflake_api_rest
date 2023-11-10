@@ -1,0 +1,28 @@
+###################################
+# INGRESS
+###################################
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gateway-ingress-8
+  labels:
+    name: gateway-ingress-8
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: /uploadFiles
+        backend:
+          service:
+            name: service-uploads
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: /analytics
+        backend:
+          service:
+            name: service-analytics
+            port: 
+              number: 80
