@@ -1,0 +1,45 @@
+name: Test coverage for the microservices
+on:
+  push:
+    branches: 
+      - develop
+env:
+  DATABASE: ${{ secrets.DATABASE }}
+  ACCOUNT: ${{ secrets.ACCOUNT }}
+  USER: ${{ secrets.USER }}
+  PASSWORD: ${{ secrets.PASSWORD }}
+  WAREHOUSE: ${{ secrets.WAREHOUSE }}
+  SCHEMA: ${{ secrets.SCHEMA }}
+  SCHEMA2: ${{ secrets.SCHEMA2 }}
+  TABLE1: ${{ secrets.TABLE1 }}
+  TABLE2: ${{ secrets.TABLE2 }}
+  TABLE3: ${{ secrets.TABLE3 }}
+jobs:
+  test_uploads:
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install pipenv
+        working-directory: ./uploads
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./uploads
+        run: pipenv install --dev
+      - name: Run unit tests
+        working-directory: ./uploads
+        run: pipenv run pytest --cov=src -v -s --cov-fail-under=60
+  test_analytics:
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install pipenv
+        working-directory: ./analytics
+        run: pip install pipenv
+      - name: Install dependencies
+        working-directory: ./analytics
+        run: pipenv install --dev
+      - name: Run unit tests
+        working-directory: ./analytics
+        run: pipenv run pytest --cov=src -v -s --cov-fail-under=60

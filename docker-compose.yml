@@ -1,0 +1,26 @@
+version: '3'
+services:
+  native:
+    networks:
+      - app_net
+    image: python:3.10
+    ports:
+      - "4000:3000"
+  uploads:
+    networks:
+      - upload_net
+      - app_net
+    build: ./uploads
+    ports:
+      - "3002:3002"
+  analytics:
+    networks:
+      - analytics_net
+      - app_net
+    build: ./analytics
+    ports:
+      - "3003:3003"
+networks:
+  app_net:
+  upload_net:
+  analytics_net:

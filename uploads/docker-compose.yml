@@ -1,0 +1,7 @@
+version: '3'
+services:
+  uploads:
+    build: .
+    ports:
+      - "3002:3002"
+    command: uvicorn main:app --host uploads --port 3002
