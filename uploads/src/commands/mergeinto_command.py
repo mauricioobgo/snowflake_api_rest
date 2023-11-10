@@ -5,6 +5,7 @@ from .base_command import BaseCommannd
 from src.db import connect2
 from jinja2 import Environment, FileSystemLoader
 from snowflake.connector import DictCursor
+import os
 
 
 
@@ -17,12 +18,12 @@ class MergeIntoExec(BaseCommannd):
         environment = Environment(loader=FileSystemLoader('src/queries'))
         template = environment.get_template('merge_into_uploadfiles.sql')
         content = template.render(
-                DATABASE = 'HUMAN_RESOURCES',
-                SCHEMA = 'EMPLOYEE_HIRING_DATA',
-                SCHEMA2 = 'PUBLIC',
-                TABLE1 = 'TBL_HIRED_EMPLOYEES',
-                TABLE2 = 'TBL_DEPARTMENTS',
-                TABLE3 = 'TBL_JOBS'
+                DATABASE = os.environ['DATABASE'],
+                SCHEMA = os.environ['SCHEMA'],
+                SCHEMA2 = os.environ['SCHEMA2'],
+                TABLE1 = os.environ['TABLE1'],
+                TABLE2 = os.environ['TABLE2'],
+                TABLE3 = os.environ['TABLE3']
         )
         content = f"""
             execute immediate $$  

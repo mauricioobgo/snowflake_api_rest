@@ -5,6 +5,7 @@ from .base_command import BaseCommannd
 from src.db import connect2
 from jinja2 import Environment, FileSystemLoader
 from snowflake.connector import DictCursor
+import os
 
 
 
@@ -21,9 +22,9 @@ class QuestionSolution(BaseCommannd):
         environment = Environment(loader=FileSystemLoader('src/queries'))
         template = environment.get_template(f'question{self.question}_results.sql')
         content = template.render(
-                DATABASE = 'HUMAN_RESOURCES',
-                SCHEMA = 'EMPLOYEE_HIRING_DATA',
-                TABLE = 'VW_DEPARTMENT_JOB_VAULT',
+                DATABASE = os.environ['DATABASE'],
+                SCHEMA = os.environ['SCHEMA'],
+                TABLE = os.environ['VIEW'],
                 YEAR = self.year
         )
         try:
