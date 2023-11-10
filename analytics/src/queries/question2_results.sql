@@ -1,0 +1,21 @@
+    WITH CTE1 AS
+    (
+        SELECT
+            DEPARTMENT_ID,
+            DEPARTMENT_NAME,
+            COUNT(DISTINCT ID_H_EP) HIRED,
+            AVG(COUNT(DISTINCT ID_H_EP)) OVER() AS AVG_HIRED
+        FROM {{DATABASE}}.{{SCHEMA}}.{{TABLE}}
+        WHERE EXTRACT('YEAR',DATETIME_H_EP) = {{YEAR}} 
+            AND DEPARTMENT_NAME IS NOT NULL
+        GROUP BY DEPARTMENT_ID,
+                DEPARTMENT_NAME
+        
+    )
+  
+    SELECT 
+        DEPARTMENT_ID,
+        DEPARTMENT_NAME,
+        HIRED
+    FROM CTE1
+    QUALIFY  HIRED  >  AVG_HIRED ;
