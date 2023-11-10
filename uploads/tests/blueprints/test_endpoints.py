@@ -17,6 +17,6 @@ def test_ping_endpoint():
 def test_reset_database_endpoint():
     response = client.post("/uploadFiles/mergeinto")
     assert response.status_code == 200
-    assert response.json() == {"msg": "Merge succeeded"}
+    assert response.json() == {"results": "Merge succeeded"}
 
 

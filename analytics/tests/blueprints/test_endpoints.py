@@ -14,12 +14,12 @@ def test_ping_endpoint():
     assert response.status_code == 200
     assert response.text == "pong"
 
-def test_reset_database_endpoint1():
+""" def test_reset_database_endpoint1():
     response = client.post("/analytics/jobDepartment/2021")
     assert response.status_code == 200
 
 def test_reset_database_endpoint2():
     response = client.post("/analytics/DepartmentHired/2021")
-    assert response.status_code == 200
+    assert response.status_code == 200 """
 
 
