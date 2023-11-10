@@ -1,0 +1,220 @@
+###################################
+# uploads
+###################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uploads
+  labels:
+    app: uploads
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uploads
+  template:
+    metadata:
+      labels:
+        app: uploads
+    spec:
+      containers:
+        - name: uploads
+          image: us-east1-docker.pkg.dev/snowflake-api-rest/snowflake-api-rest/uploads:1.0
+          ports:
+            - containerPort: 3002
+          env:
+            - name: "ACCOUNT"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: account   
+            - name: "USER"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: user
+            - name: "PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: password      
+            - name: "DATABASE"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: database
+            - name: "SCHEMA"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: schema
+            - name: "SCHEMA2"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: schema2
+            - name: "TABLE1"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: table1
+            - name: "TABLE2"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: table2
+            - name: "TABLE3"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: table3
+            - name: "VIEW"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: view
+            - name: "WAREHOUSE"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: warehouse
+          imagePullPolicy: Always
+
+---
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: uploads-config
+spec:
+  healthCheck:
+    checkIntervalSec: 30
+    port: 3002
+    type: HTTP
+    requestPath: /uploadFiles/ping
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: service-uploads
+  annotations:
+    cloud.google.com/backend-config: '{"default": "uploads-config"}'
+spec:
+  type: NodePort
+  selector:
+    app: uploads
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3002
+      nodePort: 31017
+---
+###################################
+# uploads
+###################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics
+  labels:
+    app: analytics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: analytics
+  template:
+    metadata:
+      labels:
+        app: analytics
+    spec:
+      containers:
+        - name: analytics
+          image: us-east1-docker.pkg.dev/snowflake-api-rest/snowflake-api-rest/analytics:1.0
+          ports:
+            - containerPort: 3003
+          env:
+            - name: "ACCOUNT"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: account   
+            - name: "USER"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: user
+            - name: "PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: password      
+            - name: "DATABASE"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: database
+            - name: "SCHEMA"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: schema
+            - name: "SCHEMA2"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: schema2
+            - name: "TABLE1"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: table1
+            - name: "TABLE2"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: table2
+            - name: "TABLE3"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: table3
+            - name: "VIEW"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: view
+            - name: "WAREHOUSE"
+              valueFrom:
+                secretKeyRef:
+                  name: appsecrets 
+                  key: warehouse
+          imagePullPolicy: Always
+
+---
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: analytics-config
+spec:
+  healthCheck:
+    checkIntervalSec: 30
+    port: 3003
+    type: HTTP
+    requestPath: /analytics/ping
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: service-analytics
+  annotations:
+    cloud.google.com/backend-config: '{"default": "analytics-config"}'
+spec:
+  type: NodePort
+  selector:
+    app: analytics
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3003
+      nodePort: 31024
+---
