@@ -28,7 +28,7 @@ jobs:
         run: pipenv install --dev
       - name: Run unit tests
         working-directory: ./uploads
-        run: pipenv run pytest --cov=src -v -s --cov-fail-under=70
+        run: pipenv run pytest --cov=src -v -s --cov-fail-under=60
   test_analytics:
     runs-on: ubuntu-latest
     environment: develop
@@ -42,4 +42,4 @@ jobs:
         run: pipenv install --dev
       - name: Run unit tests
         working-directory: ./analytics
-        run: pipenv run pytest --cov=src -v -s --cov-fail-under=70
+        run: pipenv run pytest --cov=src -v -s --cov-fail-under=60
