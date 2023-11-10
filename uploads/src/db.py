@@ -5,10 +5,10 @@ import os
 
 def connect2() -> snowflake.connector.SnowflakeConnection:
     connection_parameters = {
-            "account": "<account>",
-            "user": "user",
-            "password": "password",
-            "warehouse": "warehouse",  # optional
-            "database": "database",  # optional
+            "account": os.environ['ACCOUNT'],
+            "user": os.environ['USER'],
+            "password": os.environ['PASSWORD'],
+            "warehouse": os.environ['WAREHOUSE'],  # optional
+            "database": os.environ['DATABASE'],  # optional
         }
     return snowflake.connector.connect(**connection_parameters)
