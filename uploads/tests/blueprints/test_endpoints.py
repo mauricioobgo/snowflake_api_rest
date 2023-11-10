@@ -7,7 +7,7 @@ client = TestClient(router)
 def test_who_route():
     response = client.get("/who")
     assert response.status_code == 200
-    assert response.text == '"/routes"'
+    assert response.text == '"/uploadFiles"'
 
 def test_ping_endpoint():
     response = client.get("/uploadFiles/ping")

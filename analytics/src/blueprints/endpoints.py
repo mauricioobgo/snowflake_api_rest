@@ -21,7 +21,6 @@ async def ping():
 
 @router.get(baseUrl+"/jobDepartment/{year}",response_class=PlainTextResponse)
 async def job_by_department(year:str, question:int = 1 ):
-    print("ojo")
     result = QuestionSolution(question,year).execute()
     return  result
 
